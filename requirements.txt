@@ -1,0 +1,9 @@
+streamlit
+langchain
+langchain-community
+langchain-openai
+python-dotenv
+langchain_mistralai
+pydantic
+metapub
+chromadb
