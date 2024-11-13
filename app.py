@@ -44,7 +44,7 @@ def main():
         # Section to enter scientific question
         st.header("Enter your scientific question or upload medical notes!")
         placeholder_text = "Type your scientific question here..."
-        scientist_question = st.text_input("What is your question?", value="", placeholder=placeholder_text)
+        scientist_question = st.text_input("What is your question?", value= "", placeholder=placeholder_text)
 
         # Add file uploader for medical notes
         uploaded_file = st.file_uploader("Or upload a .txt file with medical notes", type=["txt"])
@@ -121,6 +121,7 @@ def main():
                         st.session_state[question] = llm_answer
                         data_repository.save_initial_answer(query_id, llm_answer)
                         st.session_state.selected_query = question
+                        
                 else:
                     st.write('No abstracts found.')
 
