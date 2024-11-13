@@ -50,8 +50,10 @@ def main():
 
         get_articles = st.button('Get articles & Answer')
         retrieved_abstracts = None
+        medical_notes = None
         # Processing user question, fetching data
         with st.spinner('Fetching abstracts. This can take a while...'):
+            
             if get_articles:
                 if uploaded_file:
                     # Read medical notes from the uploaded file
