@@ -7,3 +7,4 @@ langchain_mistralai
 pydantic
 metapub
 chromadb
+pysqlite3-binary
