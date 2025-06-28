@@ -5,7 +5,7 @@ from backend.abstract_retrieval.interface import AbstractRetriever
 from backend.abstract_retrieval.pubmed_query_simplification import simplify_pubmed_query
 from config.logging_config import get_logger
 import time
-
+import re
 
 class PubMedAbstractRetriever(AbstractRetriever):
     def __init__(self, pubmed_fetch_object: PubMedFetcher):
@@ -52,7 +52,13 @@ class PubMedAbstractRetriever(AbstractRetriever):
                 self.logger.info('Initial query is simple enough and does not need simplification.')
 
         self.logger.info(f'Searching abstracts for query: {query}')
-        return self.pubmed_fetch_object.pmids_for_query(query), query_simplified
+        return self.pubmed_fetch_object.pmids_for_query(
+                                                        query,
+                                                        retmax=30,
+                                                        sort='relevance',
+                                                        since='2011',
+                                                        until='2016'
+                                                    ), query_simplified
 
     def _get_abstracts(self, pubmed_ids: List[str]) -> List[ScientificAbstract]:
         """ Fetch PubMed abstracts  """
@@ -70,7 +76,8 @@ class PubMedAbstractRetriever(AbstractRetriever):
                     title=abstract.title,
                     authors=', '.join(abstract.authors),
                     year=abstract.year,
-                    abstract_content=abstract.abstract
+                    abstract_content=abstract.abstract,
+                    pmid=pubmed_id
                 )
                 scientific_abstracts.append(abstract_formatted)
             except Exception as e:
@@ -85,5 +92,5 @@ class PubMedAbstractRetriever(AbstractRetriever):
             Tuple)[List[ScientificAbstract], str]:
         """  Retrieve abstract list for scientist query. """
         pmids, query_simplified = self._get_abstract_list(scientist_question, simplify_query)
-        abstracts = self._get_abstracts(pmids if len(pmids) <= 20 else pmids[:20])
+        abstracts = self._get_abstracts(pmids)
         return abstracts, query_simplified

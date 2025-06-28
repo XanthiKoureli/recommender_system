@@ -9,6 +9,7 @@ class ScientificAbstract(BaseModel):
     authors: Optional[str] = None
     year: Optional[int]
     abstract_content: str
+    pmid: Optional[int]
 
 
 class UserQueryRecord(BaseModel):
