@@ -54,10 +54,8 @@ class PubMedAbstractRetriever(AbstractRetriever):
         self.logger.info(f'Searching abstracts for query: {query}')
         return self.pubmed_fetch_object.pmids_for_query(
                                                         query,
-                                                        retmax=30,
-                                                        sort='relevance',
-                                                        since='2011',
-                                                        until='2016'
+                                                        retmax=5,
+                                                        sort='relevance'
                                                     ), query_simplified
 
     def _get_abstracts(self, pubmed_ids: List[str]) -> List[ScientificAbstract]:

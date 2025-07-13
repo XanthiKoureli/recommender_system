@@ -83,7 +83,7 @@ class ChatAgent:
         Retrieve documents using similarity search
         cut_off parameter controls how many results are retrieved (default is 5)
         """
-        return retriever.similarity_search(question)[:cut_off]
+        return retriever.similarity_search_with_score(question)[:cut_off]
 
     def start_conversation(self, retriever: VectorStore, selected_query: str) -> None:
         """

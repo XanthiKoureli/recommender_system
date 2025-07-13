@@ -1,7 +1,7 @@
 import streamlit as st
 from metapub import PubMedFetcher
 from components.chat_utils import ChatAgent
-from components.chat_prompts import chat_prompt_template, qa_template
+from components.chat_prompts import chat_prompt_template, qa_template, get_type_instructions, format_documents_for_prompt
 from components.llm import llm
 from components.layout_extensions import render_app_info
 from backend.abstract_retrieval.pubmed_retriever import PubMedAbstractRetriever
@@ -126,9 +126,15 @@ def main():
                             question = scientist_question
 
                         # Use the generated question instead of raw medical notes
+                        
+                        formatted_abstracts = format_documents_for_prompt(retrieved_documents)
+
+                        type_instructions = get_type_instructions(type_instruction)
+                        
                         llm_answer = chain.invoke({
                             "question": question,
                             "retrieved_abstracts": retrieved_documents,
+                            "type_instructions": type_instructions
                         }).content
 
                         st.session_state[question] = llm_answer

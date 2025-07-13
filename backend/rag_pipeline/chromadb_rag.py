@@ -1,7 +1,7 @@
 from typing import List
 import chromadb
 from langchain.vectorstores import VectorStore
-from langchain_community.vectorstores import Chroma
+from langchain_chroma  import Chroma
 from langchain_community.vectorstores.utils import filter_complex_metadata
 from langchain_core.embeddings import Embeddings
 from langchain_core.documents.base import Document
