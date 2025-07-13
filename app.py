@@ -41,15 +41,28 @@ def main():
         # Render app info including example questions as cues for the user
         render_app_info()
 
+        st.markdown("""
+        <style>
+        .stForm {
+            border: none !important;
+            padding: 0px;
+        }
+        </style>
+        """, unsafe_allow_html=True)
+        
         # Section to enter scientific question
         st.header("Enter your scientific question or upload medical notes!")
         placeholder_text = "Type your scientific question here..."
-        scientist_question = st.text_input("What is your question?", value= "", placeholder=placeholder_text)
 
-        # Add file uploader for medical notes
-        uploaded_file = st.file_uploader("Or upload a .txt file with medical notes", type=["txt"])
+        with st.form(key="question_form", clear_on_submit=True):
+            scientist_question = st.text_input("What is your question?", value="", placeholder=placeholder_text)
+            
+            # Add file uploader for medical notes
+            uploaded_file = st.file_uploader("Or upload a .txt file with medical notes", type=["txt"])
+            
+            # This will be triggered by Enter key or button click
+            get_articles = st.form_submit_button('Get articles & Answer')
 
-        get_articles = st.button('Get articles & Answer')
         retrieved_abstracts = None
         medical_notes = None
         # Processing user question, fetching data
