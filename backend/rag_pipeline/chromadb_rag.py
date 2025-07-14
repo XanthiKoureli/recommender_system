@@ -7,7 +7,7 @@ from langchain_core.embeddings import Embeddings
 from langchain_core.documents.base import Document
 from backend.rag_pipeline.interface import RagWorkflow
 from config.logging_config import get_logger
-
+from chromadb.config import Settings
 
 class ChromaDbRag(RagWorkflow):
     """
@@ -21,7 +21,7 @@ class ChromaDbRag(RagWorkflow):
         self.logger = get_logger(__name__)
 
     def _create_chromadb_client(self):
-        return chromadb.PersistentClient(path=self.persist_directory)
+        return chromadb.PersistentClient(path=self.persist_directory, settings=Settings(anonymized_telemetry=False))
 
     def create_vector_index_for_user_query(self, documents: List[Document], query_id: str) -> VectorStore:
         """

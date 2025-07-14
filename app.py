@@ -1,3 +1,7 @@
+import os
+# Environment setup
+os.environ['NUMEXPR_MAX_THREADS'] = '8'
+
 import streamlit as st
 from metapub import PubMedFetcher
 from components.chat_utils import ChatAgent
@@ -8,7 +12,6 @@ from backend.abstract_retrieval.pubmed_retriever import PubMedAbstractRetriever
 from backend.data_repository.local_storage import LocalJSONStore
 from backend.rag_pipeline.chromadb_rag import ChromaDbRag
 from backend.rag_pipeline.embeddings import embeddings_function
-
 
 # Instantiate objects
 pubmed_client = PubMedAbstractRetriever(PubMedFetcher())
@@ -34,6 +37,9 @@ def main():
     # Define columns - this will make layout split horizontally
     column_logo, column_app_info, column_answer = st.columns([1, 4, 4])
 
+    with column_logo:
+        st.image('./assets/app-logo-trans.png')
+    
     # In the second column, place text explaining the purpose of the app and some example scientific questions
     # that your user might ask.
     with (column_app_info):
@@ -126,15 +132,11 @@ def main():
                             question = scientist_question
 
                         # Use the generated question instead of raw medical notes
-                        
-                        formatted_abstracts = format_documents_for_prompt(retrieved_documents)
-
-                        type_instructions = get_type_instructions(type_instruction)
-                        
+                                                
                         llm_answer = chain.invoke({
                             "question": question,
                             "retrieved_abstracts": retrieved_documents,
-                            "type_instructions": type_instructions
+                            "type_instructions": get_type_instructions(None)
                         }).content
 
                         st.session_state[question] = llm_answer
