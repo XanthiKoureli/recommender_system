@@ -115,16 +115,18 @@ def retrieve_answer(question, retrieved_abstracts, query_simplified, type_instru
         None)
     
     documents = data_repository.create_document_list(retrieved_abstracts)
-    
-    rag_client.create_vector_index_for_user_query(documents, query_id)
 
-    vector_index = rag_client.get_vector_index_by_user_query(query_id)
-        
+    try:
+        rag_client.create_vector_index_for_user_query(documents, query_id)
+        vector_index = rag_client.get_vector_index_by_user_query(query_id)
+    except Exception as e:
+        print(f"⚠️ Skipping query due to vector indexing error: {e}")
+        return None
+    
     retrieved_document_tuples = chat_agent.retrieve_documents(vector_index, question)
     retrieved_documents = [doc_tuple[0] for doc_tuple in retrieved_document_tuples]  
     
     formatted_abstracts = format_documents_for_prompt(retrieved_documents)
-
     type_instructions = get_type_instructions(type_instruction)
 
     llm_answer = chain.invoke({
@@ -132,7 +134,7 @@ def retrieve_answer(question, retrieved_abstracts, query_simplified, type_instru
         "retrieved_abstracts": formatted_abstracts,
         "type_instructions": type_instructions
     }).content
-    
+
     return llm_answer
 
 def load_dataset(path):
@@ -149,7 +151,7 @@ def load_dataset(path):
     
 def main():
     print("🔷 Starting...")
-    question_threshold = 10
+    question_threshold = 50
     recall_scores =[]
     all_bertscores = defaultdict(list)
     pubmed_client = PubMedAbstractRetriever(PubMedFetcher())
@@ -193,6 +195,9 @@ def main():
                 
         predicted_answer = retrieve_answer(body, abstracts, query_simplified, type_instruction)
         
+        if not predicted_answer:
+            continue
+
         print("🟩 Predicted answer:")
         print(predicted_answer)
         print("🟨 Ideal answer:")
