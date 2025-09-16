@@ -21,7 +21,11 @@ class ChromaDbRag(RagWorkflow):
         self.logger = get_logger(__name__)
 
     def _create_chromadb_client(self):
-        return chromadb.PersistentClient(path=self.persist_directory, settings=Settings(anonymized_telemetry=False))
+        return chromadb.PersistentClient(
+                    path=self.persist_directory,
+                    tenant="default_tenant",
+                    database="default_database"
+            )
 
     def create_vector_index_for_user_query(self, documents: List[Document], query_id: str) -> VectorStore:
         """

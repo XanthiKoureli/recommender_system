@@ -16,7 +16,7 @@ cachetools==5.5.2
 catalogue==2.0.10
 certifi==2025.6.15
 charset-normalizer==3.4.2
-chromadb==1.0.13
+chromadb==1.0.21
 click==8.2.1
 cloudpathlib==0.21.1
 colorama==0.4.6
@@ -107,7 +107,7 @@ packaging==24.2
 pandas==2.3.0
 pillow==11.2.1
 pipreqs==0.4.13
-posthog==6.0.0
+posthog==5.4.0
 preshed==3.0.10
 propcache==0.3.2
 protobuf==5.29.5
