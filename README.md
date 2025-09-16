@@ -79,3 +79,8 @@ The system is designed based on a modular, multi-layer RAG architecture that sep
 -   **`components/`**: Contains utility functions and classes used by the Streamlit app.
 -   **`config/`**: Contains configuration files for the project.
 -   **`evaluation/`**: Contains scripts and data for evaluating the performance of the system.
+
+
+#### Acknowledgements
+Parts of this project are based on code from [pubmed-rag-screener](https://github.com/milieere/pubmed-rag-screener), licensed under the MIT License.
+
