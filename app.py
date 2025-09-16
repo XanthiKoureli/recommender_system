@@ -99,11 +99,16 @@ def main():
                         generated_question = generate_question_from_notes(medical_notes)
                         st.write(f"Generated question from medical notes: {generated_question}")
                     # Save abstracts to storage and create vector index
+                    
+                    user_query_final = (
+                        scientist_question
+                        if scientist_question and scientist_question.strip() and scientist_question != placeholder_text
+                        else generated_question
+                    )
+
                     query_id = data_repository.save_dataset(
                         retrieved_abstracts,
-                        scientist_question
-                        if (scientist_question is not None and scientist_question != placeholder_text)
-                        else generated_question,
+                        user_query_final,
                         query_simplified,
                         medical_notes if medical_notes else None)
                     documents = data_repository.create_document_list(retrieved_abstracts)
