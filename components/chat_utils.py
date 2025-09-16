@@ -7,7 +7,7 @@ from langchain_core.runnables.utils import Output
 from langchain_community.chat_message_histories import StreamlitChatMessageHistory
 from langchain_core.prompts import ChatPromptTemplate
 from langchain.vectorstores import VectorStore
-
+from typing import List
 
 class ChatAgent:
     def __init__(self, prompt: ChatPromptTemplate, llm: Runnable):
@@ -55,13 +55,14 @@ class ChatAgent:
             st.chat_message(msg.type).write(msg.content)
 
     @staticmethod
-    def format_retrieved_abstracts_for_prompt(documents: List[Document]) -> str:
-        """
-        Format retrieved documents in a string to be passed to LLM.
-        """
+    def format_retrieved_abstracts_for_prompt(documents: list) -> str:
         formatted_strings = []
-        for doc in documents:
-            formatted_str = f"ABSTRACT TITLE: {doc.metadata['title']}, ABSTRACT CONTENT: {doc.page_content}, ABSTRACT DOI: {doc.metadata['source'] if 'source' in doc.metadata.keys() else 'DOI missing..'}"
+        for doc, score in documents:
+            title = doc.metadata.get('title', 'Title missing..') if doc.metadata else 'Title missing..'
+            content = getattr(doc, 'page_content', 'Content missing..')
+            doi = doc.metadata.get('source', 'DOI missing..') if doc.metadata else 'DOI missing..'
+
+            formatted_str = f"ABSTRACT TITLE: {title}, ABSTRACT CONTENT: {content}, ABSTRACT DOI: {doi}"
             formatted_strings.append(formatted_str)
         return "; ".join(formatted_strings)
 
