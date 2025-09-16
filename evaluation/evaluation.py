@@ -227,7 +227,3 @@ if __name__ == "__main__":
     
     
 # How to run it.   python -m evaluation.evaluation
-
-# Mean Recall@5: 0.1628
-# Median Recall@5: 0.0000
-# Std Dev Recall@5: 0.3430
