@@ -64,7 +64,6 @@ The system is designed based on a modular, multi-layer RAG architecture that sep
 │   └───setting.py
 └───evaluation
     ├───evaluation.py
-    ├───README.md
     └───training12b_new.json
 ```
 
