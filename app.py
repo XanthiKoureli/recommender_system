@@ -160,7 +160,11 @@ def main():
             selected_query_id = next(key for key, val in query_options.items() if val == selected_query)
             vector_index = rag_client.get_vector_index_by_user_query(selected_query_id)
 
-            st.write(data_repository.load_initial_answer(selected_query_id))
+            initial_answer = data_repository.load_initial_answer(selected_query_id)
+            if initial_answer:
+                st.write(initial_answer)
+            else:
+                st.info("The initial answer for this query was not found or could not be loaded.")
 
             # Clear chat history when switching query to chat about
             if 'prev_selected_query' in st.session_state and st.session_state.prev_selected_query != selected_query:

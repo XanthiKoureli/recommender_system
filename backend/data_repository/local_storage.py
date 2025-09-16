@@ -95,13 +95,26 @@ class LocalJSONStore(UserQueryDataStore):
         return self.metadata_index
 
     def save_initial_answer(self, query_id: str, initial_answer: str) -> None:
-        with open(f"{self.storage_folder_path}/{query_id}/initial_answer.json", "w") as file:
-            json_data = {query_id: initial_answer}
-            json.dump(json_data, file, indent=4)
+        answer_path = os.path.join(self.storage_folder_path, query_id, "initial_answer.json")
+        try:
+            with open(answer_path, "w") as file:
+                json.dump({"answer": initial_answer}, file, indent=4)
+            self.logger.info(f"Initial answer for query_id {query_id} saved successfully.")
+        except Exception as e:
+            self.logger.error(f"Failed to save initial answer for query_id {query_id}: {e}")
 
     def load_initial_answer(self, query_id: str):
-        with open(f"{self.storage_folder_path}/{query_id}/initial_answer.json", "r") as file:
-            return json.load(file)[query_id]
+        answer_path = os.path.join(self.storage_folder_path, query_id, "initial_answer.json")
+        if not os.path.exists(answer_path):
+            self.logger.warning(f"Initial answer file not found for query_id {query_id}.")
+            return None
+        try:
+            with open(answer_path, "r") as file:
+                data = json.load(file)
+                return data.get("answer")
+        except (json.JSONDecodeError, KeyError) as e:
+            self.logger.error(f"Failed to load or parse initial answer for query_id {query_id}: {e}")
+            return None
 
     def _rebuild_index(self) -> Dict[str, str]:
         """
